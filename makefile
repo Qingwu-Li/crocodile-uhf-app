@@ -7,29 +7,26 @@ DIR_SPRT_SRC=./spirit1_library/src
 
 SRC =  $(wildcard  ${DIR_SRC}/*.c)
 SRC += $(wildcard  ${DIR_SPRT_SRC}/*.c)
-
 OBJ = $(patsubst %.c,${DIR_OBJ}/%.o,$(notdir ${SRC}))
+
+
 INCLUDES += -I./inc
 INCLUDES += -I./spirit1_library/inc
+
 
 TARGET = spirit1_test
 
 BIN_TARGET = ${DIR_BIN}/${TARGET}
 
-CC=g++
-
-
+CC=$(CXX)
 CFLAGS = -g -Wall ${INCLUDES}
-CFLAGS += -lm
-CFLAGS += -lpthread
-CFLAGS += -pthread
 
 ${BIN_TARGET}:${OBJ}
-	$(CC) $(CFLAGS)  $(OBJ)  -o $@
+	$(CC) $(SYS_ROOT_PATH)  -g -lm -lpthread $(OBJ)  -o $@
 
 
 ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
-	$(CC) $(CFLAGS) -c  -lpthread $< -o $@
+	$(CC) $(CFLAGS)  -c  -lpthread $< -o $@
 
 ${DIR_OBJ}/%.o:${DIR_SPRT_SRC}/%.c
 	$(CC) $(CFLAGS) -c  $< -o $@
