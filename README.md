@@ -17,7 +17,7 @@ GeoSurv SDK installer version 3.1
 Enter target directory for SDK (default: /opt/geosurv/3.1):
 You are about to install the SDK to "/opt/geosurv/3.1". Proceed [Y/n]? y
 [sudo] password for liqiw:
-Extracting SDK............................................................................................................................................................done
+Extracting SDK................done
 Setting it up...done
 
 ```
