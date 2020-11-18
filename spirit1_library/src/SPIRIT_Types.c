@@ -202,25 +202,7 @@ void SpiritRefreshStatus(void)
 
   /* Reads the MC_STATUS register to update the g_xStatus */
   g_xStatus = SpiritSpiReadRegisters(MC_STATE1_BASE, 1, &tempRegValue);
-/*
-  if(g_xStatus.ANT_SELECT)    hal_debug("ANT_SELECT\n");
-  if(g_xStatus.TX_FIFO_FULL)  hal_debug("TX_FIFO_FULL\n");
-  if(g_xStatus.RX_FIFO_EMPTY) hal_debug("RX_FIFO_EMPTY\n");
-  if(g_xStatus.ERROR_LOCK)    hal_debug("ERROR_LOCK\n");
-  if(g_xStatus.XO_ON)        hal_debug("XO_ON\n");
-  if(g_xStatus.MC_STATE==MC_STATE_STANDBY)    hal_debug("MC_STATE_STANDBY\n");
-  if(g_xStatus.MC_STATE==MC_STATE_SLEEP)    hal_debug("MC_STATE_SLEEP\n");
-  if(g_xStatus.MC_STATE==MC_STATE_READY)    hal_debug("MC_STATE_READY\n");
-  if(g_xStatus.MC_STATE==MC_STATE_PM_SETUP)    hal_debug("MC_STATE_PM_SETUP\n");
-  if(g_xStatus.MC_STATE==MC_STATE_XO_SETTLING)    hal_debug("MC_STATE_XO_SETTLING\n");
-  if(g_xStatus.MC_STATE==MC_STATE_SYNTH_SETUP)    hal_debug("MC_STATE_SYNTH_SETUP\n");
-  if(g_xStatus.MC_STATE==MC_STATE_PROTOCOL)    hal_debug("MC_STATE_PROTOCOL\n");
-  if(g_xStatus.MC_STATE==MC_STATE_SYNTH_CALIBRATION)    hal_debug("MC_STATE_SYNTH_CALIBRATION\n");
-  if(g_xStatus.MC_STATE==MC_STATE_LOCK)    hal_debug("MC_STATE_LOCK\n");
-  if(g_xStatus.MC_STATE==MC_STATE_RX)    hal_debug("MC_STATE_RX\n");
-  if(g_xStatus.MC_STATE==MC_STATE_TX)    hal_debug("MC_STATE_TX\n");
-  if(g_xStatus.MC_STATE==MC_STATE_LOCKWON)    hal_debug("MC_STATE_LOCKWON\n");
-  */
+
 
 }
 

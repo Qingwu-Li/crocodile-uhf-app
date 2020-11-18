@@ -327,9 +327,9 @@ void SpiritPktBasicAddressesInit(PktBasicAddressesInit* pxPktBasicAddresses)
   tempRegValue[1] = pxPktBasicAddresses->cMulticastAddress;
   tempRegValue[2] = pxPktBasicAddresses->cMyAddress;
 
-  if(PKTBASIC_DEBUG) hal_debug(" pxPktBasicAddresses->cBroadcastAddress=%02x\n",pxPktBasicAddresses->cBroadcastAddress);
-  if(PKTBASIC_DEBUG) hal_debug(" pxPktBasicAddresses->cMulticastAddress=%02x\n",pxPktBasicAddresses->cMulticastAddress);
-  if(PKTBASIC_DEBUG) hal_debug(" pxPktBasicAddresses->cMyAddress=%02x\n",pxPktBasicAddresses->cMyAddress);
+  hal_debug_msg(PKTBASIC_DEBUG,("pxPktBasicAddresses->cBroadcastAddress=%02x\n",pxPktBasicAddresses->cBroadcastAddress));
+  hal_debug_msg(PKTBASIC_DEBUG,("pxPktBasicAddresses->cMulticastAddress=%02x\n",pxPktBasicAddresses->cMulticastAddress));
+  hal_debug_msg(PKTBASIC_DEBUG,("pxPktBasicAddresses->cMyAddress=%02x\n",pxPktBasicAddresses->cMyAddress));
   
   /* Writes values on the PCKT_FLT_GOALS registers */
   g_xStatus = SpiritSpiWriteRegisters(PCKT_FLT_GOALS_BROADCAST_BASE, 3, tempRegValue);

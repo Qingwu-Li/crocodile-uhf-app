@@ -95,16 +95,16 @@ int transfer(int fd, char *tbuf, char *rbuf, int bytes)
 	int ret;
   int i=0;
 
-  if (SPI_DEBUG) hal_debug("transfer %d\n",bytes);
+  hal_debug_msg(SPI_DEBUG,("transfer %d\n",bytes));
 
   SdkEvalSpiInit();
   
-  if (SPI_DEBUG) hal_debug("tbuf:\n");
+  hal_debug_msg(SPI_DEBUG,("tbuf:\n"));
   for(i=0;i<bytes;i++)
   {
-    if (SPI_DEBUG) hal_debug("%02x ",tbuf[i]);
+    hal_debug_msg(SPI_DEBUG,("%02x ",tbuf[i]));
   }
-  if (SPI_DEBUG) hal_debug("\n");
+  hal_debug_msg(SPI_DEBUG,("\n"));
 
 	struct spi_ioc_transfer tr = {
 		.tx_buf = (unsigned long)tbuf,
@@ -120,13 +120,13 @@ int transfer(int fd, char *tbuf, char *rbuf, int bytes)
 		hal_debug("can't send spi message");
 
 
-  if (SPI_DEBUG) hal_debug("rbuf:\n");
+  hal_debug_msg(SPI_DEBUG,("rbuf:\n"));
 
   for(i=0;i<bytes;i++)
   {
-    if (SPI_DEBUG) hal_debug("%02x ",rbuf[i]);
+    hal_debug_msg(SPI_DEBUG,("%02x ",rbuf[i]));
   }
-  if (SPI_DEBUG) hal_debug("\n");
+  hal_debug_msg(SPI_DEBUG,("\n"));
 
 	return ret;
 }
@@ -144,7 +144,7 @@ int transfer(int fd, char *tbuf, char *rbuf, int bytes)
 */
 StatusBytes SdkEvalSpiWriteRegisters(uint8_t cRegAddress, uint8_t cNbBytes, uint8_t* pcBuffer)
 {
-    if (SPI_DEBUG) hal_debug("SdkEvalSpiWriteRegisters %x %d %x\n",cRegAddress,cNbBytes,*pcBuffer);
+    hal_debug_msg(SPI_DEBUG,("SdkEvalSpiWriteRegisters %x %d %x\n",cRegAddress,cNbBytes,*pcBuffer));
 
     pthread_mutex_lock(&spi_lock);
     StatusBytes Status;
@@ -184,7 +184,7 @@ StatusBytes SdkEvalSpiWriteRegisters(uint8_t cRegAddress, uint8_t cNbBytes, uint
 StatusBytes SdkEvalSpiReadRegisters(uint8_t cRegAddress, uint8_t cNbBytes, uint8_t* pcBuffer)
 {
 
-    if (SPI_DEBUG) hal_debug("SdkEvalSpiReadRegisters %x %d\n",cRegAddress,cNbBytes);
+    hal_debug_msg(SPI_DEBUG,("SdkEvalSpiReadRegisters %x %d\n",cRegAddress,cNbBytes));
 
     pthread_mutex_lock(&spi_lock);
     StatusBytes Status;
@@ -275,7 +275,7 @@ StatusBytes SdkEvalSpiCommandStrobes(uint8_t cCommandCode)
 */
 StatusBytes SdkEvalSpiWriteFifo(uint8_t cNbBytes, uint8_t* pcBuffer)
 {
-  if (SPI_DEBUG) hal_debug("SdkEvalSpiWriteFifo %d \n",cNbBytes);
+  hal_debug_msg(SPI_DEBUG,("SdkEvalSpiWriteFifo %d \n",cNbBytes));
   
    if (SPI_DEBUG)
     {

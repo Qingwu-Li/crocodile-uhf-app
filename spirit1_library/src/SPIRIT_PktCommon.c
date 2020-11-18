@@ -596,7 +596,7 @@ uint8_t SpiritPktCommonGetVarLengthWidth(void)
  */
 void SpiritPktCommonSetDestinationAddress(uint8_t cAddress)
 {
-  if(PKTCOMMON_DEBUG) hal_debug("++ %s %s 0x%02x\n",__FUNCTION__,__FILE__,cAddress);
+  hal_debug_msg(PKTCOMMON_DEBUG,("++ %s %s 0x%02x\n",__FUNCTION__,__FILE__,cAddress));
   /* Writes value on PCKT_FLT_GOALS_SOURCE_ADDR register */
   g_xStatus = SpiritSpiWriteRegisters(PCKT_FLT_GOALS_SOURCE_ADDR_BASE, 1, &cAddress);
 
@@ -631,7 +631,7 @@ uint8_t SpiritPktCommonGetTransmittedDestAddress(void)
  */
 void SpiritPktCommonSetMyAddress(uint8_t cAddress)
 {
-  if(PKTCOMMON_DEBUG) hal_debug("SpiritPktCommonSetMyAddress %02x=%02x\n",PCKT_FLT_GOALS_TX_ADDR_BASE,cAddress);
+  hal_debug_msg(PKTCOMMON_DEBUG,("SpiritPktCommonSetMyAddress %02x=%02x\n",PCKT_FLT_GOALS_TX_ADDR_BASE,cAddress));
   /* Writes value on the PCKT_FLT_GOALS_TX_ADDR register */
   g_xStatus = SpiritSpiWriteRegisters(PCKT_FLT_GOALS_TX_ADDR_BASE, 1, &cAddress);
 
@@ -649,7 +649,7 @@ uint8_t SpiritPktCommonGetMyAddress(void)
 
   /* Reads value on the PCKT_FLT_GOALS_TX_ADDR register */
   g_xStatus = SpiritSpiReadRegisters(PCKT_FLT_GOALS_TX_ADDR_BASE, 1, &tempRegValue);
-  if(PKTCOMMON_DEBUG) hal_debug("SpiritPktCommonGetMyAddress %02x=%02x\n",PCKT_FLT_GOALS_TX_ADDR_BASE,tempRegValue);
+  hal_debug_msg(PKTCOMMON_DEBUG,("SpiritPktCommonGetMyAddress %02x=%02x\n",PCKT_FLT_GOALS_TX_ADDR_BASE,tempRegValue));
 
   /* Return value */
   return tempRegValue;
@@ -666,7 +666,7 @@ uint8_t SpiritPktCommonGetMyAddress(void)
  */
 void SpiritPktCommonSetBroadcastAddress(uint8_t cAddress)
 {
-  if(PKTCOMMON_DEBUG) hal_debug("SpiritPktCommonSetBroadcastAddress %02x=%02x\n",PCKT_FLT_GOALS_BROADCAST_BASE,cAddress);
+  hal_debug_msg(PKTCOMMON_DEBUG,("SpiritPktCommonSetBroadcastAddress %02x=%02x\n",PCKT_FLT_GOALS_BROADCAST_BASE,cAddress));
   /* Writes value on the PCKT_FLT_GOALS_BROADCAST register */
   g_xStatus = SpiritSpiWriteRegisters(PCKT_FLT_GOALS_BROADCAST_BASE, 1, &cAddress);
 
@@ -701,7 +701,7 @@ uint8_t SpiritPktCommonGetBroadcastAddress(void)
 void SpiritPktCommonSetMulticastAddress(uint8_t cAddress)
 {
   /* Writes value on the PCKT_FLT_GOALS_MULTICAST register */
-  if(PKTCOMMON_DEBUG) hal_debug("SpiritPktCommonSetMulticastAddress %02x=%02x\n",PCKT_FLT_GOALS_MULTICAST_BASE,cAddress);
+  hal_debug_msg(PKTCOMMON_DEBUG,("SpiritPktCommonSetMulticastAddress %02x=%02x\n",PCKT_FLT_GOALS_MULTICAST_BASE,cAddress));
   g_xStatus = SpiritSpiWriteRegisters(PCKT_FLT_GOALS_MULTICAST_BASE, 1, &cAddress);
 
 }

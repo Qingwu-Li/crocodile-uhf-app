@@ -186,7 +186,7 @@ static const float fPowerFactors[5][6]={
 *         contains the configuration information for the analog radio part of SPIRIT.
 * @retval Error code: 0=no error, 1=error during calibration of VCO.
 */
-uint8_t SpiritRadioInit(SRadioInit* pxSRadioInitStruct)
+uint8_t SpiritRadioInit11(SRadioInit* pxSRadioInitStruct)
 {
   int32_t FOffsetTmp;
   uint8_t anaRadioRegArray[8], digRadioRegArray[4];
@@ -255,6 +255,7 @@ uint8_t SpiritRadioInit(SRadioInit* pxSRadioInitStruct)
   hal_debug("pxSRadioInitStruct->xModulationSelect=%x\n",pxSRadioInitStruct->xModulationSelect);
   hal_debug("pxSRadioInitStruct->lFrequencyBase=%d\n",pxSRadioInitStruct->lFrequencyBase);
   hal_debug("pxSRadioInitStruct->cChannelNumber=%d\n",pxSRadioInitStruct->cChannelNumber);
+  hal_debug("pxSRadioInitStruct->lBandwidth=%d\n",pxSRadioInitStruct->lBandwidth);
   hal_debug("Frequency=%d\n", (pxSRadioInitStruct->lFrequencyBase + ((xtalOffsetFactor*s_lXtalFrequency)/FBASE_DIVIDER) + pxSRadioInitStruct->nChannelSpace * pxSRadioInitStruct->cChannelNumber));
 
  
@@ -276,6 +277,7 @@ uint8_t SpiritRadioInit(SRadioInit* pxSRadioInitStruct)
   digRadioRegArray[2] = (uint8_t)((FdevE<<4) | (tmpreg&0x08) | FdevM);
   
   /* Calculates the channel filter mantissa and exponent */
+
   SpiritRadioSearchChannelBwME(pxSRadioInitStruct->lBandwidth, &bwM, &bwE);
   
   digRadioRegArray[3] = (uint8_t)((bwM<<4) | bwE);
@@ -320,6 +322,142 @@ uint8_t SpiritRadioInit(SRadioInit* pxSRadioInitStruct)
 //    ifOffsetAna = 0x31;
 //    anaRadioRegArray[1] = 0xA3;
 //  }
+  
+  g_xStatus = SpiritSpiWriteRegisters(IF_OFFSET_ANA_BASE, 1, &ifOffsetAna);
+
+  
+  /* Sets Xtal configuration */
+  if(s_lXtalFrequency>DOUBLE_XTAL_THR)
+  {
+    SpiritRadioSetXtalFlag(XTAL_FLAG((s_lXtalFrequency/2)));
+  }
+  else
+  {
+    SpiritRadioSetXtalFlag(XTAL_FLAG(s_lXtalFrequency));
+  }
+  
+  /* Sets the channel number in the corresponding register */
+  SpiritSpiWriteRegisters(CHNUM_BASE, 1, &pxSRadioInitStruct->cChannelNumber);
+  
+  /* Configures the Analog Radio registers */
+  SpiritSpiWriteRegisters(CHSPACE_BASE, 4, anaRadioRegArray);
+  
+  /* Configures the Digital Radio registers */
+  g_xStatus = SpiritSpiWriteRegisters(MOD1_BASE, 4, digRadioRegArray);
+  
+  /* Enable the freeze option of the AFC on the SYNC word */
+  SpiritRadioAFCFreezeOnSync(S_ENABLE);
+  
+  /* Set the IQC correction optimal value */
+  anaRadioRegArray[0]=0x80;
+  anaRadioRegArray[1]=0xE3;
+  g_xStatus = SpiritSpiWriteRegisters(0x99, 2, anaRadioRegArray);
+  
+  return SpiritRadioSetFrequencyBase(pxSRadioInitStruct->lFrequencyBase);
+  
+}
+uint8_t SpiritRadioInit(SRadioInit* pxSRadioInitStruct)
+{
+  int32_t FOffsetTmp;
+  uint8_t anaRadioRegArray[8], digRadioRegArray[4];
+  int16_t xtalOffsetFactor;
+  uint8_t drM, drE, FdevM, FdevE, bwM, bwE;
+    
+  /* Workaround for Vtune */
+  uint8_t value = 0xA0; SpiritSpiWriteRegisters(0x9F, 1, &value);
+  
+  /* Calculates the offset respect to RF frequency and according to xtal_ppm parameter: (xtal_ppm*FBase)/10^6 */
+  FOffsetTmp = (int32_t)(((float)pxSRadioInitStruct->nXtalOffsetPpm*pxSRadioInitStruct->lFrequencyBase)/PPM_FACTOR);
+  
+  /* Check the parameters */
+  s_assert_param(IS_FREQUENCY_BAND(pxSRadioInitStruct->lFrequencyBase));
+  s_assert_param(IS_MODULATION_SELECTED(pxSRadioInitStruct->xModulationSelect));
+  s_assert_param(IS_DATARATE(pxSRadioInitStruct->lDatarate));
+  s_assert_param(IS_FREQUENCY_OFFSET(FOffsetTmp,s_lXtalFrequency));
+  s_assert_param(IS_CHANNEL_SPACE(pxSRadioInitStruct->nChannelSpace,s_lXtalFrequency));
+  s_assert_param(IS_F_DEV(pxSRadioInitStruct->lFreqDev,s_lXtalFrequency));
+  
+  /* Disable the digital, ADC, SMPS reference clock divider if fXO>24MHz or fXO<26MHz */
+  SpiritSpiCommandStrobes(COMMAND_STANDBY);    
+  do{
+    /* Delay for state transition */
+    for(volatile uint8_t i=0; i!=0xFF; i++);
+    
+    /* Reads the MC_STATUS register */
+    SpiritRefreshStatus();
+  }while(g_xStatus.MC_STATE!=MC_STATE_STANDBY);
+  
+  if(s_lXtalFrequency<DOUBLE_XTAL_THR)
+  {
+    SpiritRadioSetDigDiv(S_DISABLE);
+    s_assert_param(IS_CH_BW(pxSRadioInitStruct->lBandwidth,s_lXtalFrequency));
+  }
+  else
+  {      
+    SpiritRadioSetDigDiv(S_ENABLE);
+    s_assert_param(IS_CH_BW(pxSRadioInitStruct->lBandwidth,(s_lXtalFrequency>>1)));
+  }
+  
+  /* Goes in READY state */
+  SpiritSpiCommandStrobes(COMMAND_READY);
+  do{
+    /* Delay for state transition */
+    for(volatile uint8_t i=0; i!=0xFF; i++);
+    
+    /* Reads the MC_STATUS register */
+    SpiritRefreshStatus();
+  }while(g_xStatus.MC_STATE!=MC_STATE_READY);
+  
+  /* Calculates the FC_OFFSET parameter and cast as signed int: FOffsetTmp = (Fxtal/2^18)*FC_OFFSET */
+  xtalOffsetFactor = (int16_t)(((float)FOffsetTmp*FBASE_DIVIDER)/s_lXtalFrequency);
+  anaRadioRegArray[2] = (uint8_t)((((uint16_t)xtalOffsetFactor)>>8)&0x0F);
+  anaRadioRegArray[3] = (uint8_t)(xtalOffsetFactor);
+  
+  /* Calculates the channel space factor */
+  anaRadioRegArray[0] =((uint32_t)pxSRadioInitStruct->nChannelSpace<<9)/(s_lXtalFrequency>>6)+1;
+  
+  SpiritManagementWaTRxFcMem(pxSRadioInitStruct->lFrequencyBase);
+  
+  /* 2nd order DEM algorithm enabling */
+  uint8_t tmpreg; SpiritSpiReadRegisters(0xA3, 1, &tmpreg);
+  tmpreg &= ~0x02; SpiritSpiWriteRegisters(0xA3, 1, &tmpreg);
+  
+  /* Check the channel center frequency is in one of the possible range */
+  s_assert_param(IS_FREQUENCY_BAND((pxSRadioInitStruct->lFrequencyBase + ((xtalOffsetFactor*s_lXtalFrequency)/FBASE_DIVIDER) + pxSRadioInitStruct->nChannelSpace * pxSRadioInitStruct->cChannelNumber)));  
+  
+  /* Calculates the datarate mantissa and exponent */
+  SpiritRadioSearchDatarateME(pxSRadioInitStruct->lDatarate, &drM, &drE);
+  digRadioRegArray[0] = (uint8_t)(drM);
+  digRadioRegArray[1] = (uint8_t)(0x00 | pxSRadioInitStruct->xModulationSelect |drE);
+  
+  /* Read the fdev register to preserve the clock recovery algo bit */
+  SpiritSpiReadRegisters(0x1C, 1, &tmpreg);
+  
+  /* Calculates the frequency deviation mantissa and exponent */
+  SpiritRadioSearchFreqDevME(pxSRadioInitStruct->lFreqDev, &FdevM, &FdevE);
+  digRadioRegArray[2] = (uint8_t)((FdevE<<4) | (tmpreg&0x08) | FdevM);
+  
+  /* Calculates the channel filter mantissa and exponent */
+  SpiritRadioSearchChannelBwME(pxSRadioInitStruct->lBandwidth, &bwM, &bwE);
+  
+  digRadioRegArray[3] = (uint8_t)((bwM<<4) | bwE);
+ 
+  float if_off=(3.0f*480140)/(s_lXtalFrequency>>12)-64;  /* #1035-D */
+  
+  uint8_t ifOffsetAna = ROUND(if_off);
+  
+  if(s_lXtalFrequency<DOUBLE_XTAL_THR)
+  {
+    /* if offset digital is the same in case of single xtal */
+    anaRadioRegArray[1] = ifOffsetAna;
+  }
+  else
+  {
+    if_off=(3.0f*480140)/(s_lXtalFrequency>>13)-64;      /* #1035-D */
+    
+    /* ... otherwise recompute it */
+    anaRadioRegArray[1] = ROUND(if_off);
+  }
   
   g_xStatus = SpiritSpiWriteRegisters(IF_OFFSET_ANA_BASE, 1, &ifOffsetAna);
 

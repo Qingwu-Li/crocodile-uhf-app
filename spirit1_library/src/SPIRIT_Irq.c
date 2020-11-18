@@ -280,35 +280,6 @@ void SpiritIrqGetStatus(SpiritIrqs* pxIrqStatus)
     *pIrqPointer = tempRegValue[3-i];
      pIrqPointer++;
   }
-
-  if(IRQ_DEBUG)
-  {
-    if(pxIrqStatus->IRQ_RX_DATA_READY            ) hal_debug(" IRQ_RX_DATA_READY        \n");     
-    if(pxIrqStatus->IRQ_TX_DATA_SENT             ) hal_debug("	IRQ_TX_DATA_SENT             \n");
-    if(pxIrqStatus->IRQ_MAX_RE_TX_REACH          ) hal_debug("	IRQ_MAX_RE_TX_REACH          \n");
-    if(pxIrqStatus->IRQ_CRC_ERROR                ) hal_debug("	IRQ_CRC_ERROR                \n");
-    if(pxIrqStatus->IRQ_TX_FIFO_ERROR            ) hal_debug(" IRQ_TX_FIFO_ERROR        \n");         
-    if(pxIrqStatus->IRQ_RX_FIFO_ERROR            ) hal_debug("	IRQ_RX_FIFO_ERROR            \n");
-    if(pxIrqStatus->IRQ_TX_FIFO_ALMOST_FULL      ) hal_debug("	IRQ_TX_FIFO_ALMOST_FULL      \n");
-    if(pxIrqStatus->IRQ_TX_FIFO_ALMOST_EMPTY     ) hal_debug("	IRQ_TX_FIFO_ALMOST_EMPTY     \n");
-    if(pxIrqStatus->IRQ_RX_FIFO_ALMOST_FULL      ) hal_debug("	IRQ_RX_FIFO_ALMOST_FULL      \n");
-    if(pxIrqStatus->IRQ_RX_FIFO_ALMOST_EMPTY     ) hal_debug("	IRQ_RX_FIFO_ALMOST_EMPTY     \n");
-    if(pxIrqStatus->IRQ_MAX_BO_CCA_REACH         ) hal_debug("	IRQ_MAX_BO_CCA_REACH         \n");
-    if(pxIrqStatus->IRQ_VALID_PREAMBLE           ) hal_debug("	IRQ_VALID_PREAMBLE           \n");
-    if(pxIrqStatus->IRQ_VALID_SYNC               ) hal_debug("	IRQ_VALID_SYNC               \n");
-    if(pxIrqStatus->IRQ_WKUP_TOUT_LDC            ) hal_debug("	IRQ_WKUP_TOUT_LDC            \n");
-    if(pxIrqStatus->IRQ_READY                    ) hal_debug("	IRQ_READY                    \n");
-    if(pxIrqStatus->IRQ_STANDBY_DELAYED          ) hal_debug("	IRQ_STANDBY_DELAYED          \n");
-    if(pxIrqStatus->IRQ_LOW_BATT_LVL             ) hal_debug("	IRQ_LOW_BATT_LVL             \n");
-    if(pxIrqStatus->IRQ_POR                      ) hal_debug("	IRQ_POR                      \n");
-    if(pxIrqStatus->IRQ_BOR                      ) hal_debug("	IRQ_BOR                      \n");
-    if(pxIrqStatus->IRQ_XO_COUNT_EXPIRED         ) hal_debug("	IRQ_XO_COUNT_EXPIRED         \n");
-    if(pxIrqStatus->IRQ_SYNTH_LOCK_TIMEOUT       ) hal_debug("	IRQ_SYNTH_LOCK_TIMEOUT       \n");
-    if(pxIrqStatus->IRQ_SYNTH_LOCK_STARTUP       ) hal_debug("	IRQ_SYNTH_LOCK_STARTUP       \n");
-    if(pxIrqStatus->IRQ_SYNTH_CAL_TIMEOUT        ) hal_debug("	IRQ_SYNTH_CAL_TIMEOUT        \n");
-    if(pxIrqStatus->IRQ_TX_START_TIME            ) hal_debug("	IRQ_TX_START_TIME            \n");
-    if(pxIrqStatus->IRQ_AES_END                  ) hal_debug("	IRQ_AES_END                  \n");
-    }  
 }
 
 

@@ -17,8 +17,9 @@
 #include <poll.h>
 
 using namespace std;
+static int verbose=0;
 
-void*  P2PInterrupt_dummy(void* arg) 
+void*  P2PInterrupt_thread(void* arg) 
 {
   struct pollfd fdPoll;
   std::string pollingFile = std::string("/sys/class/gpio/gpio") + std::to_string(HOST_GPIO_TO_RADIO_IRQ)+"/value";
@@ -629,7 +630,7 @@ void P2PInterruptHandler(void)
 
 int radio_send_data(uint8_t *data,uint8_t len,uint8_t timeout_s)
 {
-  hal_debug("[%s]\n",data);
+  hal_debug_msg(verbose,("[%s]\n",data));
 
   xTxFrame.Cmd = ACK_OK;
   xTxFrame.CmdLen = 0x01;
@@ -646,11 +647,7 @@ int radio_send_data(uint8_t *data,uint8_t len,uint8_t timeout_s)
   do
   {
     tx_fifo_size=SpiritLinearFifoReadNumElementsTxFifo();
-  } while (tx_fifo_size!=0);
-  
-  
-
-  
+  } while (tx_fifo_size!=0);  
 
   time(&T);                                                    
   
@@ -687,9 +684,6 @@ uint8_t recive_data(uint8_t *pRxBuff,uint8_t *Rxlen,uint8_t timeout_s)
   time_t T;                                                                     
   struct timespec t;
   int wait_ret=0;
-
-
-
   
 
   time(&T);                                                    
@@ -714,10 +708,7 @@ uint8_t recive_data(uint8_t *pRxBuff,uint8_t *Rxlen,uint8_t timeout_s)
   {
   memcpy(pRxBuff,ptempbuffer+5,readlen-5);
   *Rxlen=readlen-5;
-  }
-   
-
- 
+  } 
   return *Rxlen;
 }
 
@@ -728,6 +719,7 @@ int main(int argc, char *argv[])
   uint8_t rxdata[1024]={0};
 
 
+
   uint8_t rx_len=96;
   uint8_t tx_len=96;
 
@@ -736,6 +728,7 @@ int main(int argc, char *argv[])
   uint32_t recieved_bytes=0;
 
   pthread_t tid1;
+
 
 
   cmdline::parser a;
@@ -751,13 +744,15 @@ int main(int argc, char *argv[])
   (uint32_t)BANDWIDTH
 };
 
-  a.add<int>("channel",   'c', "channel number",        false, 0, cmdline::range(0, 32));
-  a.add<int>("datarate",   'b', "air datarate",         false, 38400, cmdline::range(100, 500000));
-  a.add<int>("addr",      'a', "my address",            false, 0x34, cmdline::range(1, 256));
-  a.add<int>("dest",      'd', "destination address",   false, 0x44, cmdline::range(1, 256));
-  a.add<string>("data",   't', "string to send via uhf", false, "");
+  a.add<int>("channel",   'c', "Channel number",        false, 0, cmdline::range(0, 32));
+  a.add<int>("datarate",  'e', "Air dataratE [100, 500000]",         false, 38400, cmdline::range(100, 500000));
+  a.add<int>("bandwidth", 'b', "Bandwidth [1100, 800100]",         false, 100000, cmdline::range(1100, 800100));
+  a.add<int>("addr",      'a', "my Address",            false, 0x34, cmdline::range(1, 256));
+  a.add<int>("dest",      'd', "Destination address",   false, 0x44, cmdline::range(1, 256));
   a.add<int>("iterate",   'i', "iterates of the test",    false, 1, cmdline::range(1, 65535));
-  a.add("receiver", 'r', "As a receiver");
+  a.add("receiver",       'r', "As a receiver");
+  a.add("verbose",       'v', "enable verbose message");
+  a.add<string>("data",   't', "string to send via uhf", false, "");
 
   
   a.parse_check(argc, argv);
@@ -774,8 +769,10 @@ int main(int argc, char *argv[])
 
   xRadioInit.cChannelNumber=a.get<int>("channel");
   xRadioInit.lDatarate=a.get<int>("datarate");
+  xRadioInit.lBandwidth=a.get<int>("bandwidth");
   test_iterates=a.get<int>("iterate");
   hal_debug("test_iterates %d\n",test_iterates);
+  verbose=a.exist("verbose");
 
 
   RadioGpioInit(HOST_GPIO_TO_RADIO_IRQ,RADIO_MODE_EXTI_IN);
@@ -789,11 +786,11 @@ int main(int argc, char *argv[])
   
   HAL_Spirit1_Init();
   P2P_Init(&xRadioInit);
-  if (pthread_create(&tid1, NULL,P2PInterrupt_dummy, (void*)"new thread:") != 0) 
+  if (pthread_create(&tid1, NULL,P2PInterrupt_thread, (void*)"new thread:") != 0) 
   {
       hal_debug("pthread_create error.");
   }
-   SpiritGpioInit(&radio_gpio_0);
+  SpiritGpioInit(&radio_gpio_0);
   SpiritGpioInit(&radio_gpio_1);
   SpiritGpioInit(&radio_gpio_2);
   SpiritGpioInit(&radio_gpio_3);
@@ -806,7 +803,7 @@ int main(int argc, char *argv[])
       rx_len=0;
       memset(rxdata,0,sizeof(rxdata));
       recieved_bytes+=recive_data(rxdata,&rx_len,10);
-      hal_debug("[%s]\n",rxdata);
+      hal_debug_msg(verbose,("[%s]\n",rxdata));
       hal_debug("recieved_bytes=%d\n",recieved_bytes);
       Spirit1StartRx();
     }
@@ -831,63 +828,9 @@ int main(int argc, char *argv[])
     if (tick>0)
     {
       hal_debug("send %d bytes take %ld ms speed= %ld kbps \n",sent_bytes,tick,(sent_bytes*8)/tick);
-    }
-    usleep(100);
-
-    
-
-    //recive_data(rxdata,&rx_len,10);
- 
-
-    if(rx_len==tx_len)
-    {
-      hal_debug("OK\n");
-    }
-    
+    }    
   }
   return 0;
 }
 
 /////////////////////////////////
-
-int mainaa(int argc, char *argv[])
-{
-  int i=0;
-  RadioGpioInit(HOST_GPIO_TO_RADIO_IRQ,RADIO_MODE_GPIO_OUT);
-  Spirit1InterfaceInit();
-  
-  SGpioInit radio_gpio_0={SPIRIT_GPIO_0, SPIRIT_GPIO_MODE_DIGITAL_OUTPUT_HP, SPIRIT_GPIO_DIG_OUT_VDD};
-  SGpioInit radio_gpio_1={SPIRIT_GPIO_1, SPIRIT_GPIO_MODE_DIGITAL_OUTPUT_HP, SPIRIT_GPIO_DIG_OUT_VDD};
-  SGpioInit radio_gpio_2={SPIRIT_GPIO_2, SPIRIT_GPIO_MODE_DIGITAL_OUTPUT_HP, SPIRIT_GPIO_DIG_OUT_VDD};
-  SGpioInit radio_gpio_3={SPIRIT_GPIO_3, SPIRIT_GPIO_MODE_DIGITAL_OUTPUT_HP, SPIRIT_GPIO_DIG_OUT_VDD};
-
-  SpiritGpioInit(&radio_gpio_0);
-  SpiritGpioInit(&radio_gpio_1);
-  SpiritGpioInit(&radio_gpio_2);
-  SpiritGpioInit(&radio_gpio_3);
-  
-
-  while(1)
-  {
-    i++;
-    if(i%2)
-    {
-      SpiritGpioSetLevel(SPIRIT_GPIO_0, LOW);
-      SpiritGpioSetLevel(SPIRIT_GPIO_1, LOW);
-      SpiritGpioSetLevel(SPIRIT_GPIO_2, LOW);
-      SpiritGpioSetLevel(SPIRIT_GPIO_3, LOW);
-    }
-    else
-    {
-      SpiritGpioSetLevel(SPIRIT_GPIO_0, HIGH);
-      SpiritGpioSetLevel(SPIRIT_GPIO_1, HIGH);
-      SpiritGpioSetLevel(SPIRIT_GPIO_2, HIGH);
-      SpiritGpioSetLevel(SPIRIT_GPIO_3, HIGH);
-    }
-    sleep(1);
-
-    RadioGpioGetLevel(HOST_GPIO_TO_RADIO_IRQ);
-    sleep(1);
-  }
-
-}

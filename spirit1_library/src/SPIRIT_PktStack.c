@@ -496,7 +496,6 @@ void SpiritPktStackSetAddressLength(void)
  */
 void SpiritPktStackSetPayloadLength(uint16_t nPayloadLength)
 {
-  if(PKTSTACK_DEBUG) hal_debug("++ %s %s,%d\n",__FUNCTION__,__FILE__,nPayloadLength);
   uint8_t tempRegValue[2];
 
   /* Computes the oversize (address + control) size */
@@ -551,7 +550,6 @@ void SpiritPktStackSetVarLengthWidth(uint16_t nMaxPayloadLength, StackControlLen
   uint8_t tempRegValue,
           i;
   uint32_t packetLength;
-  if(PKTSTACK_DEBUG) hal_debug("++ %s %s,%d,%d\n",__FUNCTION__,__FILE__,nMaxPayloadLength,xControlLength);
 
 
   /* packet length = payload length + address length (2) + control length */

@@ -116,13 +116,13 @@
 uint8_t SpiritLinearFifoReadNumElementsRxFifo(void)
 {
   uint8_t tempRegValue;
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
 
   /* Reads the register value */
   g_xStatus = SpiritSpiReadRegisters(LINEAR_FIFO_STATUS0_BASE, 1, &tempRegValue);
 
   /* Build and return value */
- if (LINEFIFO_DEBUG) hal_debug("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F);
+ hal_debug_msg(LINEFIFO_DEBUG,("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F));
   return (tempRegValue & 0x7F);
 
 }
@@ -136,12 +136,12 @@ uint8_t SpiritLinearFifoReadNumElementsRxFifo(void)
 uint8_t SpiritLinearFifoReadNumElementsTxFifo(void)
 {
   uint8_t tempRegValue;
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
 
   /* Reads the number of elements in TX FIFO and return the value */
   g_xStatus = SpiritSpiReadRegisters(LINEAR_FIFO_STATUS1_BASE, 1, &tempRegValue);
 
-  if (LINEFIFO_DEBUG) hal_debug("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F);
+  hal_debug_msg(LINEFIFO_DEBUG,("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F));
 
   /* Build and return value */
   return (tempRegValue & 0x7F);
@@ -161,7 +161,7 @@ void SpiritLinearFifoSetAlmostFullThresholdRx(uint8_t cThrRxFifo)
 {
   uint8_t tempRegValue;
   
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s %d\n",__FUNCTION__,__FILE__,cThrRxFifo);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s %d\n",__FUNCTION__,__FILE__,cThrRxFifo));
 
   /* Check the parameters */
   s_assert_param(IS_FIFO_THR(cThrRxFifo));
@@ -185,12 +185,12 @@ void SpiritLinearFifoSetAlmostFullThresholdRx(uint8_t cThrRxFifo)
 uint8_t SpiritLinearFifoGetAlmostFullThresholdRx(void)
 {
   uint8_t tempRegValue;
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
 
   /* Reads the almost full threshold for RX FIFO and return the value */
   g_xStatus = SpiritSpiReadRegisters(FIFO_CONFIG3_RXAFTHR_BASE, 1, &tempRegValue);
 
-  if (LINEFIFO_DEBUG) hal_debug("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F);
+  hal_debug_msg(LINEFIFO_DEBUG,("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F));
   /* Build and return value */
   return (tempRegValue & 0x7F);
 
@@ -206,7 +206,7 @@ uint8_t SpiritLinearFifoGetAlmostFullThresholdRx(void)
 void SpiritLinearFifoSetAlmostEmptyThresholdRx(uint8_t cThrRxFifo)
 {
   uint8_t tempRegValue;
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s %d\n",__FUNCTION__,__FILE__,cThrRxFifo);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s %d\n",__FUNCTION__,__FILE__,cThrRxFifo));
 
   /* Check the parameters */
   s_assert_param(IS_FIFO_THR(cThrRxFifo));
@@ -228,12 +228,12 @@ void SpiritLinearFifoSetAlmostEmptyThresholdRx(uint8_t cThrRxFifo)
 uint8_t SpiritLinearFifoGetAlmostEmptyThresholdRx(void)
 {
   uint8_t tempRegValue;
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
 
   /* Reads the almost empty threshold for RX FIFO and returns the value */
   g_xStatus = SpiritSpiReadRegisters(FIFO_CONFIG2_RXAETHR_BASE, 1, &tempRegValue);
 
-  if (LINEFIFO_DEBUG) hal_debug("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F);
+  hal_debug_msg(LINEFIFO_DEBUG,("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F));
   /* Build and return value */
   return (tempRegValue & 0x7F);
 
@@ -251,7 +251,7 @@ uint8_t SpiritLinearFifoGetAlmostEmptyThresholdRx(void)
 void SpiritLinearFifoSetAlmostFullThresholdTx(uint8_t cThrTxFifo)
 {
   uint8_t tempRegValue;
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s %d\n",__FUNCTION__,__FILE__,cThrTxFifo);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s %d\n",__FUNCTION__,__FILE__,cThrTxFifo));
 
   /* Check the parameters */
   s_assert_param(IS_FIFO_THR(cThrTxFifo));
@@ -279,12 +279,12 @@ void SpiritLinearFifoSetAlmostFullThresholdTx(uint8_t cThrTxFifo)
 uint8_t SpiritLinearFifoGetAlmostFullThresholdTx(void)
 {
   uint8_t tempRegValue;
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
 
   /* Reads the almost full threshold for Tx FIFO and returns the value */
   g_xStatus = SpiritSpiReadRegisters(FIFO_CONFIG1_TXAFTHR_BASE, 1, &tempRegValue);
 
-  if (LINEFIFO_DEBUG) hal_debug("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F);
+  hal_debug_msg(LINEFIFO_DEBUG,("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F));
   /* Build and returns value */
   return (tempRegValue & 0x7F);
 
@@ -300,7 +300,7 @@ uint8_t SpiritLinearFifoGetAlmostFullThresholdTx(void)
 void SpiritLinearFifoSetAlmostEmptyThresholdTx(uint8_t cThrTxFifo)
 {
   uint8_t tempRegValue;
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s %d\n",__FUNCTION__,__FILE__,cThrTxFifo);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s %d\n",__FUNCTION__,__FILE__,cThrTxFifo));
 
   /* Check the parameters */
   s_assert_param(IS_FIFO_THR(cThrTxFifo));
@@ -326,12 +326,12 @@ void SpiritLinearFifoSetAlmostEmptyThresholdTx(uint8_t cThrTxFifo)
 uint8_t SpiritLinearFifoGetAlmostEmptyThresholdTx(void)
 {
   uint8_t tempRegValue;
-  if (LINEFIFO_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(LINEFIFO_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
 
   /* Reads the almost empty threshold for TX FIFO and returns the value */
   g_xStatus = SpiritSpiReadRegisters(FIFO_CONFIG0_TXAETHR_BASE, 1, &tempRegValue);
 
-  if (LINEFIFO_DEBUG) hal_debug("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F);
+  hal_debug_msg(LINEFIFO_DEBUG,("-- %s %s %d\n",__FUNCTION__,__FILE__,tempRegValue & 0x7F));
 
   /* Build and return value */
   return (tempRegValue & 0x7F);

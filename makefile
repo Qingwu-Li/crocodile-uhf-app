@@ -36,7 +36,7 @@ ${DIR_OBJ}/%.o:${DIR_SPRT_SRC}/%.c
 
 clean:
 	rm -rf $(DIR_OBJ)/*.o
-	rm -rf $(DIR_OBJ)/*
+	rm -rf $(DIR_BIN)/*
 
 dir:
 	mkdir -p $(DIR_OBJ)

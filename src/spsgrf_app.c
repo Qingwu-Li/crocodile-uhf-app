@@ -115,7 +115,7 @@ static int32_t s_RfModuleOffset=0;
 */
 void Spirit1InterfaceInit(void)
 { 
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   /* Initialize the SDN pin micro side */
   RadioGpioInit(HOST_GPIO_TO_RADIO_SDN,RADIO_MODE_GPIO_OUT);
 
@@ -135,7 +135,7 @@ void Spirit1InterfaceInit(void)
   SpiritManagementRangeExtInit(); 
   
 
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -158,7 +158,7 @@ uint8_t EepromIdentification(void)
   }
   else
     status = 0;
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
   
   return status;
 }
@@ -175,7 +175,7 @@ uint8_t EepromIdentification(void)
 void SpiritManagementIdentificationRFBoard(void)
 {
   tmpBuffer[128];
-  if (APP_DEBUG) hal_debug("++ %s SPIRIT1_HAS_EEPROM  %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s SPIRIT1_HAS_EEPROM  %s\n",__FUNCTION__,__FILE__));
     do{
       /* Delay for state transition */
       for(volatile uint8_t i=0; i!=0xFF; i++);
@@ -266,7 +266,7 @@ void SpiritManagementIdentificationRFBoard(void)
     SpiritManagementSetBand(tmpBuffer[3]);
     
   }
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 #endif
@@ -279,7 +279,7 @@ void SpiritManagementIdentificationRFBoard(void)
 */
 void SpiritManagementIdentificationRFBoard(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s NO_EEPROM  %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s NO_EEPROM  %s\n",__FUNCTION__,__FILE__));
   do{
     /* Delay for state transition */
     for(volatile uint8_t i=0; i!=0xFF; i++);
@@ -290,7 +290,7 @@ void SpiritManagementIdentificationRFBoard(void)
 
     SpiritRadioSetXtalFrequency(XTAL_FREQUENCY);        
     //SpiritGeneralSetSpiritVersion(SPIRIT_VERSION); 
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 #endif
@@ -303,9 +303,9 @@ void SpiritManagementIdentificationRFBoard(void)
 */
 void SpiritManagementSetBand(uint8_t value)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   s_RfModuleBand = value;
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -317,9 +317,9 @@ void SpiritManagementSetBand(uint8_t value)
 */
 uint8_t SpiritManagementGetBand(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   return s_RfModuleBand;
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -329,7 +329,7 @@ uint8_t SpiritManagementGetBand(void)
 */
 void SpiritManagementRangeExtInit(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   RangeExtType range_type = SpiritManagementGetRangeExtender();
   
   if(range_type==RANGE_EXT_SKYWORKS_169) {
@@ -373,7 +373,7 @@ void SpiritManagementRangeExtInit(void)
     /* Vcont control */
     //SpiritGpioInit(&(SGpioInit){SPIRIT_GPIO_2, SPIRIT_GPIO_MODE_DIGITAL_OUTPUT_HP, SPIRIT_GPIO_DIG_OUT_TX_STATE});
   }
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -384,9 +384,9 @@ void SpiritManagementRangeExtInit(void)
 */
 RangeExtType SpiritManagementGetRangeExtender(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   return xRangeExtType;
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -397,9 +397,9 @@ RangeExtType SpiritManagementGetRangeExtender(void)
 */
 void SpiritManagementSetRangeExtender(RangeExtType xRangeType)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   xRangeExtType = xRangeType;
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -410,9 +410,9 @@ void SpiritManagementSetRangeExtender(RangeExtType xRangeType)
 */
 uint8_t SdkEvalGetHasEeprom(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   return s_eeprom;
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -423,9 +423,9 @@ uint8_t SdkEvalGetHasEeprom(void)
 */
 void SdkEvalSetHasEeprom(uint8_t eeprom)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   s_eeprom = eeprom;
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -436,10 +436,10 @@ void SdkEvalSetHasEeprom(uint8_t eeprom)
 */
 void Spirit1GpioIrqInit(SGpioInit *pGpioIRQ)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   /* Spirit IRQ config */
   SpiritGpioInit(pGpioIRQ);
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -450,10 +450,10 @@ void Spirit1GpioIrqInit(SGpioInit *pGpioIRQ)
 */
 void Spirit1RadioInit(SRadioInit *pRadioInit)
 {    
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   /* Spirit Radio config */
   SpiritRadioInit(pRadioInit);
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 
 }
@@ -465,11 +465,11 @@ void Spirit1RadioInit(SRadioInit *pRadioInit)
 */
 void Spirit1SetPower(uint8_t cIndex, float fPowerdBm)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   /* Spirit Radio set power */
   SpiritRadioSetPALeveldBm(cIndex,fPowerdBm);
   SpiritRadioSetPALevelMaxIndex(cIndex);
-  if (APP_DEBUG) hal_debug("-- %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("-- %s %s\n",__FUNCTION__,__FILE__));
 
 }
 
@@ -480,7 +480,7 @@ void Spirit1SetPower(uint8_t cIndex, float fPowerdBm)
 */
 void Spirit1PacketConfig(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
 #if defined(USE_STack_PROTOCOL)
   
   STackProtocolInit();
@@ -490,7 +490,7 @@ void Spirit1PacketConfig(void)
   BasicProtocolInit();
   
 #endif
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 
 }
 
@@ -501,7 +501,7 @@ void Spirit1PacketConfig(void)
 */
 void Spirit1SetPayloadlength(uint8_t length)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
 #if defined(USE_STack_PROTOCOL)
     /* Payload length config */
   SpiritPktStackSetPayloadLength(length);
@@ -510,7 +510,7 @@ void Spirit1SetPayloadlength(uint8_t length)
   /* payload length config */
   SpiritPktBasicSetPayloadLength(length);
 #endif
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 
 }
 
@@ -521,7 +521,7 @@ void Spirit1SetPayloadlength(uint8_t length)
 */
 void Spirit1SetDestinationAddress(uint8_t address)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s 0x%02X\n",__FUNCTION__,__FILE__,address);
+  hal_debug_msg(APP_DEBUG,("++ %s %s 0x%02X\n",__FUNCTION__,__FILE__,address));
 #if defined(USE_STack_PROTOCOL)
   /* Destination address */
   SpiritPktStackSetDestinationAddress(address);
@@ -529,10 +529,9 @@ void Spirit1SetDestinationAddress(uint8_t address)
   /* destination address */
   SpiritPktBasicSetDestinationAddress(address);
 #else
-  hal_debug("nothing \n");
   Must define something
 #endif
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 
 }
 
@@ -543,13 +542,13 @@ void Spirit1SetDestinationAddress(uint8_t address)
 */
 void Spirit1EnableTxIrq(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   /* Spirit IRQs enable */
   SpiritIrq(TX_DATA_SENT, S_ENABLE); 
 #if defined(USE_STack_LLP)
   SpiritIrq(MAX_RE_TX_REACH, S_ENABLE);
 #endif  
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 
 }
 
@@ -560,12 +559,12 @@ void Spirit1EnableTxIrq(void)
 */
 void Spirit1EnableRxIrq(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
     /* Spirit IRQs enable */
   SpiritIrq(RX_DATA_READY, S_ENABLE);
   SpiritIrq(RX_DATA_DISC, S_ENABLE); 
   SpiritIrq(RX_TIMEOUT, S_ENABLE);
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 
 }
 
@@ -576,10 +575,10 @@ void Spirit1EnableRxIrq(void)
 */
 void Spirit1DisableIrq(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   /* Spirit IRQs enable */
   SpiritIrqDeInit(NULL);
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 
 }
 /**
@@ -589,7 +588,7 @@ void Spirit1DisableIrq(void)
 */
 void Spirit1SetRxTimeout(float cRxTimeOut)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   if(cRxTimeOut == 0)
   {
     /* rx timeout config */
@@ -603,7 +602,7 @@ void Spirit1SetRxTimeout(float cRxTimeOut)
     Spirit1EnableSQI();
     SpiritTimerSetRxTimeoutStopCondition(RSSI_AND_SQI_ABOVE_THRESHOLD);  
   }
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 
 }
 
@@ -614,9 +613,9 @@ void Spirit1SetRxTimeout(float cRxTimeOut)
 */
 void Spirit1SetRssiTH(int dbmValue)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   SpiritQiSetRssiThresholddBm(dbmValue);
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 
 }
 
@@ -627,10 +626,9 @@ void Spirit1SetRssiTH(int dbmValue)
 */
 float Spirit1GetRssiTH(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   float dbmValue=0;
   dbmValue = SpiritQiGetRssidBm();
-  if (1) hal_debug("-- %s %f\n",__FUNCTION__,dbmValue);
 
   return dbmValue;
 }
@@ -642,11 +640,11 @@ float Spirit1GetRssiTH(void)
 */
 void Spirit1EnableSQI(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   /* enable SQI check */
   SpiritQiSetSqiThreshold(SQI_TH_0);
   SpiritQiSqiCheck(S_ENABLE);
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 
 }
 
@@ -657,14 +655,14 @@ void Spirit1EnableSQI(void)
 */
 void Spirit1StartRx(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   if(g_xStatus.MC_STATE==MC_STATE_RX)
   {
     SpiritCmdStrobeSabort();
   }
   /* RX command */
   SpiritCmdStrobeRx();
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 }
 
 /**
@@ -674,36 +672,18 @@ void Spirit1StartRx(void)
 */
 void Spirit1GetRxPacket(uint8_t *buffer, uint8_t *cRxData )
 {
-
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   uint8_t noofbytes = 0;
   /* when rx data ready read the number of received bytes */
 
   noofbytes=SpiritLinearFifoReadNumElementsRxFifo();
-  if (APP_DEBUG) hal_debug("noofbytes %d\n",noofbytes);
+  hal_debug_msg(APP_DEBUG,("noofbytes %d\n",noofbytes));
   *cRxData=noofbytes;
   if(0==noofbytes) return ;
     /* read the RX FIFO */
   RadioSpiReadFifo(noofbytes, buffer);
-
-
-  if (APP_DEBUG) 
-  {
-    if(noofbytes<5)
-    {
-      return;
-    }
-    hal_debug("\n");
-    for(int i=0;i<5;i++)
-    {
-      hal_debug("%02x ",buffer[i]);
-    }
-    hal_debug("[%s]",buffer+5);
-  }
-  
-  
   SpiritCmdStrobeFlushRxFifo();
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 }
 
 /**
@@ -713,7 +693,7 @@ void Spirit1GetRxPacket(uint8_t *buffer, uint8_t *cRxData )
 */
 void Spirit1StartTx(uint8_t *buffer, uint8_t size )
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   if(g_xStatus.MC_STATE==MC_STATE_RX)
   {
     SpiritCmdStrobeSabort();
@@ -739,7 +719,7 @@ void Spirit1StartTx(uint8_t *buffer, uint8_t size )
   
   /* send the TX command */
   SpiritCmdStrobeTx();
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 }
 
 /**
@@ -749,24 +729,23 @@ void Spirit1StartTx(uint8_t *buffer, uint8_t size )
 */
 void Spirit1ClearIRQ(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   SpiritIrqClearStatus();
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 }
 
 
 void SpiritManagementSetOffset(int32_t value)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   s_RfModuleOffset=value;
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
+  hal_debug_msg(APP_DEBUG,("-- %s\n",__FUNCTION__));
 }
 
 int32_t SpiritManagementGetOffset(void)
 {
-  if (APP_DEBUG) hal_debug("++ %s %s\n",__FUNCTION__,__FILE__);
+  hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
   return s_RfModuleOffset;
-  if (APP_DEBUG) hal_debug("-- %s\n",__FUNCTION__);
 }
 
 /**

@@ -55,6 +55,8 @@ typedef enum
 unsigned long GetTickCount();
 #define hal_debug printf
 
+#define hal_debug_msg(cond,printf_exp)   ((void)((cond)?(printf printf_exp),1:0))
+
 #ifdef __cplusplus
 }
 #endif

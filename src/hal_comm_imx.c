@@ -27,15 +27,3 @@ unsigned long GetTickCount()
 
     return (ts.tv_sec * 1000 + ts.tv_nsec / 1000000);
 }
-/*
-int hal_debug(const char *__restrict __fmt, ...)
-{
-    va_list arg;
-    int done;
-
-    va_start (arg, __fmt);
-    done = printf ( __fmt, arg);
-    va_end (arg);
-
-    return done;
-}*/
