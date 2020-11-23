@@ -43,37 +43,55 @@ scp ./bin/spirit1_test root@10.60.34.93:/tmp/
 scp ./bin/spirit1_test root@10.60.34.54:/tmp/
 ```
 
+
+
 ## run test on EVK
 
-test with datarate 9600 bandwidth    2000
-
-with option -r indicate as a receiver
-
-with option -t indicate as a transmitter
+Transmitter command:
 
 ```
-./spirit1_test -r -e 9600 -b 200000
-./spirit1_test -t 1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN -i 100 -e 9600 -b 200000
+./spirit1_test -t 50 -i 10000 -e 76800 -p -10
 ```
+
+-t 50 ,		 Transmitter , package size 50.
+
+-i 10000,	Test run 10000 integrations 
+
+-e 76800,   Air datarate 76800
+
+-p -10,       Max power lever -10dm
+
+Receiver Command:
+
+```
+./spirit1_test -r -e 76800 -p -10
+```
+
+-r                Receiver 
+
+-e 76800,   Air datarate 76800
+
+-p -10,       Max power lever -10dm
 
 
 
 ## Usage
 
 ```
-spirit1_test -h
-undefined short option: -h
 usage: ./spirit1_test [options] ...
 options:
-  -c, --channel      Channel number (int [=0])
-  -e, --datarate     Air dataratE [100, 500000] (int [=38400])
-  -b, --bandwidth    Bandwidth [1100, 800100] (int [=100000])
-  -a, --addr         my Address (int [=52])
-  -d, --dest         Destination address (int [=68])
-  -i, --iterate      iterates of the test (int [=1])
-  -r, --receiver     As a receiver
-  -v, --verbose      enable verbose message
-  -t, --data         string to send via uhf (string [=])
-  -?, --help         print this message
+  -c, --channel           Channel number (int [=0])
+  -e, --datarate          Air dataratE [100, 500000] (int [=38400])
+  -b, --bandwidth         Bandwidth [1100, 800100] (int [=100000])
+  -a, --addr              my Address (int [=52])
+  -d, --dest              Destination address (int [=68])
+  -i, --iterate           iterates of the test (int [=1])
+  -w, --waittime          the wait ms between two packages(transmitter) (int [=1])
+  -p, --powerlevel        Output power leve[-34,11] (int [=0])
+  -t, --transmitlength    Transmit buffer length[2,60] (int [=2])
+  -r, --receiver          as a receiver
+  -v, --verbose           enable verbose message
+  -?, --help              print this message
+
 ```
 
