@@ -372,6 +372,7 @@ void SpiritPktStackLlpInit(PktStackLlpInit* pxPktStackLlpInit)
 
   /* Piggybacking mechanism setting on the PROTOCOL1 register */
   g_xStatus = SpiritSpiReadRegisters(PROTOCOL1_BASE, 2, tempRegValue);
+  printf("pxPktStackLlpInit->xPiggybacking=%d\n",pxPktStackLlpInit->xPiggybacking);
   if(pxPktStackLlpInit->xPiggybacking == S_ENABLE)
   {
     tempRegValue[0] |= PROTOCOL1_PIGGYBACKING_MASK;
@@ -382,8 +383,10 @@ void SpiritPktStackLlpInit(PktStackLlpInit* pxPktStackLlpInit)
   }
 
   /* RX and TX autoack mechanisms setting on the PROTOCOL0 register */
+  printf("pxPktStackLlpInit->xAutoAck=%d\n",pxPktStackLlpInit->xAutoAck);
   if(pxPktStackLlpInit->xAutoAck == S_ENABLE)
   {
+    
     tempRegValue[1] |= PROTOCOL0_AUTO_ACK_MASK;
   }
   else
@@ -394,8 +397,11 @@ void SpiritPktStackLlpInit(PktStackLlpInit* pxPktStackLlpInit)
   /* Max number of retransmission setting */
   tempRegValue[1] &= ~PROTOCOL0_NMAX_RETX_MASK;
   tempRegValue[1] |= pxPktStackLlpInit->xNMaxRetx;
+  printf("pxPktStackLlpInit->xNMaxRetx=%d\n",pxPktStackLlpInit->xNMaxRetx);
 
   /* Writes registers */
+  printf("PROTOCOL[1] %x\n",tempRegValue[0]);
+  printf("PROTOCOL[0] %x\n",tempRegValue[1]);
   g_xStatus = SpiritSpiWriteRegisters(PROTOCOL1_BASE, 2, tempRegValue);
 
 }

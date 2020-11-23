@@ -357,6 +357,7 @@ uint8_t SpiritQiGetRssi(void)
 
   /* Reads the RSSI_LEVEL register value */
   g_xStatus = SpiritSpiReadRegisters(RSSI_LEVEL_BASE, 1, &tempRegValue);
+  printf("RSSI %d\n",(int)tempRegValue);
 
   /* Returns the RSSI value */
   return tempRegValue;

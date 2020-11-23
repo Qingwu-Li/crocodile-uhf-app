@@ -23,8 +23,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-//#include "spsgrf.h"
-//#include "spsgrf_io.h"
 #include "hal_interface.h"
 #include <pthread.h>
 
@@ -43,8 +41,8 @@
 
 /*************************Uncomment the the protocol to be used****************/
 /* One of the other of the two defines should be activated */
-#define USE_STack_PROTOCOL
-//#define USE_BASIC_PROTOCOL
+//#define USE_STack_PROTOCOL
+#define USE_BASIC_PROTOCOL
 
 /* to activate Basic protocol with Address field */
 /* to be activated with USE_BASIC_PROTOCOL */
@@ -60,12 +58,8 @@
 /******************************************************************************/
 
 #ifdef CSMA_ENABLE
-
-//#include "SPIRIT_Csma.h"
-
-
 /* CSMA configuration parameters */
-  #define PERSISTENT_MODE_EN              S_DISABLE
+  #define PERSISTENT_MODE_EN              S_ENABLE
   #define CS_PERIOD                       TBIT_TIME_64
   #define CS_TIMEOUT                      TCCA_TIME_3
   #define MAX_NB                          5
@@ -110,30 +104,28 @@ extern CsmaInit xCsmaInit;
 #define BASE_FREQUENCY              915.0e6
 #endif
 
-#define CHANNEL_SPACE               100e3
-#define DEFAULT_CHANNEL_NUMBER              0
+#define CHANNEL_SPACE               100e3 
+#define DEFAULT_CHANNEL_NUMBER      0
 #define MODULATION_SELECT           FSK
 #define DEFAULT_DATARATE            38400
-#define FREQ_DEVIATION              20e3
+#define FREQ_DEVIATION              19836//20e3
 #define BANDWIDTH                   100E3
-
-#define POWER_DBM                   11.6
 #define POWER_INDEX                 7
-#define RECEIVE_TIMEOUT             2000.0 /*change the value for required timeout period*/   
+#define RECEIVE_TIMEOUT             8000.0 /*change the value for required timeout period*/   
 
 #define RSSI_THRESHOLD              -120  /* Default RSSI at reception, more \
                                                              than noise floor */
-#define CSMA_RSSI_THRESHOLD         -90   /* Higher RSSI to Transmit. \
+#define CSMA_RSSI_THRESHOLD         -60   /* Higher RSSI to Transmit. \
                               If it's lower, the Channel will be seen as busy */
 
 /*  Packet configuration parameters  */
-#define PREAMBLE_LENGTH             PKT_PREAMBLE_LENGTH_04BYTES
+#define PREAMBLE_LENGTH             PKT_PREAMBLE_LENGTH_08BYTES
 #define SYNC_LENGTH                 PKT_SYNC_LENGTH_4BYTES
 #define SYNC_WORD                   0x88888888
 #define LENGTH_TYPE                 PKT_LENGTH_VAR
-#define LENGTH_WIDTH                7
-#define CRC_MODE                    PKT_CRC_MODE_8BITS
-#define CONTROL_LENGTH              PKT_CONTROL_LENGTH_0BYTES
+#define LENGTH_WIDTH                15     
+#define CRC_MODE                    PKT_CRC_MODE_24BITS
+#define CONTROL_LENGTH              PKT_CONTROL_LENGTH_4BYTES
 #define EN_FEC                      S_DISABLE
 #define EN_WHITENING                S_ENABLE
 
@@ -163,28 +155,26 @@ extern CsmaInit xCsmaInit;
 
 #endif
     
-#define EN_AUTOACK                      S_DISABLE
-#define EN_PIGGYBACKING                 S_DISABLE
-#define MAX_RETRANSMISSIONS             PKT_DISABLE_RETX
+#define EN_AUTOACK                      S_ENABLE
+#define EN_PIGGYBACKING                 S_ENABLE
+#define MAX_RETRANSMISSIONS             PKT_N_RETX_10
 
 
-#define PAYLOAD_LEN                     90 /*20 bytes data+tag+cmd_type+cmd+cmdlen+datalen*/
+
+#define PAYLOAD_LEN                     80 
 #define APPLI_CMD                       0x11
 #define NWK_CMD                         0x22
-#define LED_TOGGLE                      0xff
 #define ACK_OK                          0x01
 #define MAX_BUFFER_LEN                  96
-#define TIME_TO_EXIT_RX                 3000
-#define DELAY_RX_LED_TOGGLE             100   
-#define DELAY_TX_LED_GLOW               200 
-#define LPM_WAKEUP_TIME                 100
-#define DATA_SEND_TIME                  50//30
+
+
+
+
 
 /* Exported types ------------------------------------------------------------*/
-extern volatile FlagStatus xRxDoneFlag, xTxDoneFlag;
 extern volatile FlagStatus PushButtonStatusWakeup; 
-extern uint16_t wakeupCounter;
-extern uint16_t dataSendCounter ;
+//extern uint16_t wakeupCounter;
+//extern uint16_t dataSendCounter ;
 extern volatile FlagStatus PushButtonStatusData, datasendFlag;
 
 

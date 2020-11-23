@@ -22,7 +22,9 @@
 #include "hal_gpio_imx.h"
 #include "hal_interface.h"
 #include "p2p_app.h"
+#include "hal_spi_imx.h"
 #include "SPIRIT1_Util.h"
+
 /**
 * @addtogroup ST_SPIRIT1
 * @{
@@ -59,7 +61,7 @@
 * @defgroup SPIRIT1_Util_Private_Macros                 SPIRIT1_Util Private Macros
 * @{
 */
-#define XTAL_FREQUENCY          50000000
+
 #define SPIRIT_VERSION          SPIRIT_VERSION_3_0
 #define RANGE_TYPE              RANGE_EXT_NONE       /*RANGE_EXT_SKYWORKS*/
 /**
@@ -694,6 +696,7 @@ void Spirit1GetRxPacket(uint8_t *buffer, uint8_t *cRxData )
 void Spirit1StartTx(uint8_t *buffer, uint8_t size )
 {
   hal_debug_msg(APP_DEBUG,("++ %s %s\n",__FUNCTION__,__FILE__));
+  
   if(g_xStatus.MC_STATE==MC_STATE_RX)
   {
     SpiritCmdStrobeSabort();

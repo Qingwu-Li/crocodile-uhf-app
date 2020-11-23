@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include "SPIRIT_Config.h"
 #include "hal_spi_imx.h"
+#include "hal_gpio_imx.h"
+
 
 
 #ifdef __cplusplus
@@ -36,19 +38,10 @@ typedef enum
   SET = !RESET
 } FlagStatus, ITStatus;
 
-typedef enum 
-{
-  DISABLE = 0, 
-  ENABLE = !DISABLE
-} FunctionalState;
 
 
 
-typedef enum
-{ 
-  GPIO_PIN_RESET = 0,
-  GPIO_PIN_SET
-}GPIO_PinState;
+
 
 #define __IO    volatile
 

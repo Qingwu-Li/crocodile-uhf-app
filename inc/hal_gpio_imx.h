@@ -24,7 +24,17 @@ extern "C" {
  * @addtogroup BSP
  * @{
  */
+typedef enum
+{ 
+  GPIO_PIN_RESET = 0,
+  GPIO_PIN_SET
+}GPIO_PinState;
 
+typedef enum 
+{
+  DISABLE = 0, 
+  ENABLE = !DISABLE
+} FunctionalState;
 
 /* Exported types ------------------------------------------------------------*/
   /* MCU GPIO pin working mode for GPIO */

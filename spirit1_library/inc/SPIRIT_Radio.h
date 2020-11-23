@@ -288,6 +288,7 @@ typedef struct
   uint32_t          lBandwidth;          /*!< Specifies the channel filter bandwidth
                                              expressed in Hz. This parameter can be
                                              in the range between 1100 and 800100 Hz */
+  int32_t           lMaxPwrLevel;
 
 }SRadioInit;
 

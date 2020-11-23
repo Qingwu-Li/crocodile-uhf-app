@@ -268,18 +268,58 @@ void SpiritIrqGetStatus(SpiritIrqs* pxIrqStatus)
 {
   uint8_t tempRegValue[4];
   uint8_t* pIrqPointer = (uint8_t*)pxIrqStatus;
+  uint32_t* pIrqPointer32=(uint32_t*)pxIrqStatus;
+
+  uint8_t anydebugmessage=0;
   
   /* Reads IRQ_STATUS registers */
   g_xStatus = SpiritSpiReadRegisters(IRQ_STATUS3_BASE, 4, tempRegValue);
-
-
 
   /* Build the IRQ Status word */
   for(uint8_t i=0; i<4; i++)
   {
     *pIrqPointer = tempRegValue[3-i];
      pIrqPointer++;
+  } 
+
+  if(IRQ_DEBUG)
+  {
+    //if(pxIrqStatus->IRQ_RX_DATA_READY) {printf("RX_DATA_READY\t"); anydebugmessage=1;} 
+    //if(pxIrqStatus->IRQ_TX_DATA_SENT) {printf("IRQ_TX_DATA_SENT\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_MAX_RE_TX_REACH) {printf("IRQ_MAX_RE_TX_REACH\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_CRC_ERROR) {printf("IRQ_CRC_ERROR\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_TX_FIFO_ERROR) {printf("IRQ_TX_FIFO_ERROR\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_RX_FIFO_ERROR) {printf("IRQ_RX_FIFO_ERROR\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_TX_FIFO_ALMOST_FULL) {printf("IRQ_TX_FIFO_ALMOST_FULL\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_RX_FIFO_ALMOST_FULL) {printf("IRQ_RX_FIFO_ALMOST_FULL\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_RX_FIFO_ALMOST_EMPTY) {printf("IRQ_RX_FIFO_ALMOST_EMPTY\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_TX_FIFO_ALMOST_EMPTY) {printf("IRQ_TX_FIFO_ALMOST_EMPTY\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_MAX_BO_CCA_REACH) {printf("IRQ_MAX_BO_CCA_REACH\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_VALID_PREAMBLE) {printf("IRQ_VALID_PREAMBLE\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_VALID_SYNC) {printf("IRQ_VALID_SYNC\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_RSSI_ABOVE_TH) {printf("IRQ_RSSI_ABOVE_TH\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_WKUP_TOUT_LDC) {printf("IRQ_WKUP_TOUT_LDC\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_READY) {printf("IRQ_READY\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_STANDBY_DELAYED) {printf("IRQ_STANDBY_DELAYED\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_LOW_BATT_LVL) {printf("IRQ_LOW_BATT_LVL\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_POR) {printf("IRQ_POR\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_BOR) {printf("IRQ_BOR\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_LOCK) {printf("IRQ_LOCK\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_PM_COUNT_EXPIRED) {printf("IRQ_PM_COUNT_EXPIRED\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_XO_COUNT_EXPIRED) {printf("IRQ_XO_COUNT_EXPIRED\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_SYNTH_LOCK_TIMEOUT) {printf("IRQ_SYNTH_LOCK_TIMEOUT\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_SYNTH_LOCK_STARTUP) {printf("IRQ_SYNTH_LOCK_STARTUP\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_SYNTH_CAL_TIMEOUT) {printf("IRQ_SYNTH_CAL_TIMEOUT\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_TX_START_TIME) {printf("IRQ_TX_START_TIME\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_RX_START_TIME) {printf("IRQ_RX_START_TIME\t"); anydebugmessage=1;}
+    //if(pxIrqStatus->IRQ_RX_TIMEOUT) {printf("IRQ_RX_TIMEOUT\t"); anydebugmessage=1;}
+    if(pxIrqStatus->IRQ_AES_END) {printf("IRQ_AES_END\t"); anydebugmessage=1;}
+    if(anydebugmessage) printf("\n\n");
   }
+
+
+  
+  
 }
 
 

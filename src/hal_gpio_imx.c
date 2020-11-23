@@ -7,6 +7,58 @@
 #include <string.h>
 #include <signal.h>
 
+
+/**
+* @brief   Read the value from gpio sysfs.
+* @param  const char * file can be:
+active_low  device     edge   subsystem  uevent
+consumers   direction  power  suppliers  value
+
+export unexport
+
+* @retval The number of milliseconds indicates success.
+*/
+
+char * gpio_sysfs_read(int id,const char * file)
+{
+    char gpio_sysfs_path[256];
+
+        snprintf(gpio_sysfs_path, sizeof(gpio_sysfs_path), "/sys/class/gpio/gpio%d/%s", id,file);
+        int fd = open(gpio_sysfs_path, O_RDONLY);
+        if (-1 == fd)
+            perror(gpio_sysfs_path);
+        return NULL;
+
+}
+/**
+* @brief   Read the value from gpio sysfs.
+* @param  const char * file can be:
+active_low  device     edge   subsystem  uevent
+consumers   direction  power  suppliers  value
+
+export unexport
+
+* @retval The number of milliseconds indicates success.
+*/
+int gpio_sysfs_write(int id,const char * file,const char * value)
+{   int ret=-1;
+    char gpio_sysfs_path[256];
+        snprintf(gpio_sysfs_path, sizeof(gpio_sysfs_path), "/sys/class/gpio/gpio%d/%s", id,file);
+        int fd = open(gpio_sysfs_path, O_WRONLY);
+        if (-1 == fd)
+            perror(gpio_sysfs_path);
+            return -1;
+        ret=write(fd, value, strlen(value));
+        if (-1 ==ret)
+		        perror("gpio_sysfs_write write failed");  
+            return -1;
+        close(fd);
+
+        return ret;
+  
+}
+
+
 int gpio_open_export() 
 {
 	int export_fd = open("/sys/class/gpio/export",O_WRONLY);
@@ -42,6 +94,15 @@ int gpio_open_direction(int id) {
 	return fd;
 }
 
+int gpio_open_edge(int id) {
+	char path[0x100];
+	snprintf(path, 0x100, "/sys/class/gpio/gpio%d/edge", id);
+	int fd = open(path, O_RDWR);
+	if (-1 == fd)
+		perror(path);
+	return fd;
+}
+
 void gpio_write(int fd, const char * value) 
 {
 
@@ -57,6 +118,7 @@ int gpio_read(int fd)
     
   return value-0x30;
 }
+
 
 void RadioGpioInit(RadioGpioPin xGpio, RadioGpioMode xGpioMode)
 {
@@ -89,13 +151,28 @@ void RadioGpioInit(RadioGpioPin xGpio, RadioGpioMode xGpioMode)
   {
     hal_debug("set gpio %d to out\n",xGpio);
     gpio_write(f_direction,"out");
+    close(f_direction);
   }
-  else if(RADIO_MODE_EXTI_IN==xGpioMode)
+  else
   {
     hal_debug("set gpio %d to in\n",xGpio);
     gpio_write(f_direction,"in");
+    close(f_direction);
+
+    if(RADIO_MODE_EXTI_IN==xGpioMode)
+    {
+      int f_edge=gpio_open_edge(xGpio);
+      if(-1==f_edge)
+      {
+        printf("gpio_open_edge failed \n");
+        return;
+      }
+
+
+
+    }
   }
-  close(f_direction);
+ 
 
 
 

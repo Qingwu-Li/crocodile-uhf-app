@@ -118,6 +118,7 @@ void SpiritManagementSetFrequencyBase(uint32_t lFBase)
   
   /* Calculates the channel center frequency */
   Fc = lFBase + FOffset + lChannelSpace*cChannelNum;
+  printf("Fc=%d\n",Fc);
   
   /* Reads the reference divider */
   uint8_t cRefDiv = (uint8_t)SpiritRadioGetRefDiv()+1;
@@ -170,6 +171,11 @@ void SpiritManagementSetFrequencyBase(uint32_t lFBase)
   
   /* Search the VCO charge pump word and set the corresponding register */
   wcp = SpiritRadioSearchWCP(Fc);
+
+  printf("wcp=%d\r\n",wcp);
+  wcp=0;
+  printf("wcp=%d\r\n",wcp);
+
   
   synthWord = (uint32_t)(lFBase*(((double)(FBASE_DIVIDER*cRefDiv*s_vectcBHalfFactor[band]))/SpiritRadioGetXtalFrequency()));
   
