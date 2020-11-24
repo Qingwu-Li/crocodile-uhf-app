@@ -2,7 +2,7 @@
 
 
 
-## Install geosurv SDK
+## Install GEOSURV SDK
 
 Download SDK from TC, here is link of 3.1
 
@@ -23,8 +23,6 @@ Setting it up...done
 ```
 
 ## build crocodile-uhf-app
-
-
 
 ```
 git clone https://github.com/Qingwu-Li/crocodile-uhf-app.git
@@ -94,4 +92,18 @@ options:
   -?, --help              print this message
 
 ```
+
+
+
+# Hardware setup for IMX8MM EVK
+
+| IMX8MM Name | EVK J1003 Pin Number | IDS01A4 | IDS01A4 CN |
+| ----------- | -------------------- | ------- | ---------- |
+| ECSPI2_MOSI | 19                   | PA7     | CN5.4      |
+| ECSPI2_MISO | 21                   | PA6     | CN5.5      |
+| ECSPI2_SCL  | 23                   | PB3     | CN9.4      |
+| ECSPI2_SS0  | 24                   | PB6     | CN5.3      |
+| SAI5_RXC    | 40                   | PA10    | CN9.3      |
+| SAI5_RXD0   | 38                   | PC7     | CN5.2      |
+
 
